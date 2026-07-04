@@ -1,0 +1,4 @@
+# Keep screenshots out of the package archive — the README loads them
+# from GitHub instead.
+screenshot_light.png
+screenshot_top.png

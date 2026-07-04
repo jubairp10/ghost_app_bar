@@ -8,6 +8,10 @@ large-title style).
 
 Works on all renderers: plain gradient paint, no `ShaderMask`.
 
+| Light | Dark |
+|---|---|
+| ![Light theme](https://raw.githubusercontent.com/jubairp10/ghost_app_bar/main/screenshot_light.png) | ![Dark theme](https://raw.githubusercontent.com/jubairp10/ghost_app_bar/main/screenshot_top.png) |
+
 ## Features
 
 - Transparent floating bar with `leading` and `actions` slots
