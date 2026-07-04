@@ -48,9 +48,14 @@ class GhostAppBarScaffold extends StatefulWidget {
   /// for boxes.
   final List<Widget> slivers;
 
+  /// Optional external scroll controller. If null, one is created
+  /// internally.
+  final ScrollController? controller;
+
   const GhostAppBarScaffold({
     super.key,
     required this.title,
+    this.controller,
     this.largeTitleStyle,
     this.compactTitleStyle,
     this.leading,
@@ -68,6 +73,7 @@ class GhostAppBarScaffold extends StatefulWidget {
   GhostAppBarScaffold.children({
     Key? key,
     required String title,
+    ScrollController? controller,
     TextStyle? largeTitleStyle,
     TextStyle? compactTitleStyle,
     Widget? leading,
@@ -82,6 +88,7 @@ class GhostAppBarScaffold extends StatefulWidget {
   }) : this(
           key: key,
           title: title,
+          controller: controller,
           largeTitleStyle: largeTitleStyle,
           compactTitleStyle: compactTitleStyle,
           leading: leading,
@@ -100,20 +107,33 @@ class GhostAppBarScaffold extends StatefulWidget {
 }
 
 class _GhostAppBarScaffoldState extends State<GhostAppBarScaffold> {
-  final ScrollController _scroll = ScrollController();
+  late ScrollController _scroll;
+  ScrollController? _internal;
   bool _collapsed = false;
 
   @override
   void initState() {
     super.initState();
+    _scroll = widget.controller ?? (_internal = ScrollController());
     _scroll.addListener(_onScroll);
   }
 
   @override
+  void didUpdateWidget(GhostAppBarScaffold oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.controller != oldWidget.controller) {
+      _scroll.removeListener(_onScroll);
+      _internal?.dispose();
+      _internal = null;
+      _scroll = widget.controller ?? (_internal = ScrollController());
+      _scroll.addListener(_onScroll);
+    }
+  }
+
+  @override
   void dispose() {
-    _scroll
-      ..removeListener(_onScroll)
-      ..dispose();
+    _scroll.removeListener(_onScroll);
+    _internal?.dispose();
     super.dispose();
   }
 

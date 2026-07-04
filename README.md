@@ -8,9 +8,9 @@ large-title style).
 
 Works on all renderers: plain gradient paint, no `ShaderMask`.
 
-| Light | Dark |
-|---|---|
-| ![Light theme](https://raw.githubusercontent.com/jubairp10/ghost_app_bar/main/screenshot_light.png) | ![Dark theme](https://raw.githubusercontent.com/jubairp10/ghost_app_bar/main/screenshot_top.png) |
+| Expanded | Collapsed | Dark |
+|---|---|---|
+| ![Expanded](https://raw.githubusercontent.com/jubairp10/ghost_app_bar/main/screenshot_light.png) | ![Collapsed](https://raw.githubusercontent.com/jubairp10/ghost_app_bar/main/screenshot_collapsed.png) | ![Dark theme](https://raw.githubusercontent.com/jubairp10/ghost_app_bar/main/screenshot_top.png) |
 
 ## Features
 
@@ -48,6 +48,7 @@ For full control use the default constructor with `slivers`.
 
 | Parameter | Default | Description |
 |---|---|---|
+| `controller` | internal | Optional external `ScrollController` |
 | `collapseOffset` | `30` | Scroll offset (px) after which the compact title shows |
 | `scrimColor` | `0xFF06140A` | Color the content dissolves into — match your background |
 | `scrimExtent` | `34` | Extra fade distance below the bar |
