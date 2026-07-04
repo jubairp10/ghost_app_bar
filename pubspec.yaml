@@ -3,7 +3,7 @@ description: >-
   An invisible app bar scaffold with a gradient scrim and iOS-style
   large-title collapse. Content scrolls behind the bar and dissolves
   into the status bar with no visible seam.
-version: 0.1.0
+version: 0.1.1
 repository: https://github.com/jubairp10/ghost_app_bar
 topics:
   - appbar
