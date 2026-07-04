@@ -1,0 +1,16 @@
+name: ghost_app_bar_example
+description: Example app for the ghost_app_bar package.
+publish_to: "none"
+version: 1.0.0
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  ghost_app_bar:
+    path: ../
+
+flutter:
+  uses-material-design: true
