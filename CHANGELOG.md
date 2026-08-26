@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0
+## 0.2.0
 
 - **Any widget can go in the bar.** Added `largeTitle` and `compactTitle`,
   which take arbitrary widgets — a heading with a subtitle, an avatar row, a
@@ -8,10 +8,6 @@
 - `title` is now optional. Pass it for the plain-text case, or supply both
   custom widgets and omit it. Supplying `title` alongside one custom widget
   fills in the other, so you can override just one side.
-- Not breaking: existing code passing `title:` keeps working unchanged.
-
-## 0.2.0
-
 - **Theme-aware by default.** `scrimColor` and both title styles now fall back
   to the ambient `Theme` instead of hardcoded white-on-dark-green, so the bar
   is readable in a stock light or dark app without passing any colors.
