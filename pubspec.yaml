@@ -3,7 +3,7 @@ description: >-
   Transparent collapsing app bar with an iOS-style large title that fades as
   you scroll. Content scrolls behind it and dissolves into the status bar with
   no seam. Theme-aware, zero dependencies.
-version: 0.2.0
+version: 0.2.1
 repository: https://github.com/jubairp10/ghost_app_bar
 issue_tracker: https://github.com/jubairp10/ghost_app_bar/issues
 topics:

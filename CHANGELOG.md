@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+- Shrink the published archive from 27 MB to a few KB. 0.2.0 accidentally
+  shipped the example's generated Android/iOS/web scaffolding; it is now
+  excluded. No code changes — upgrade from 0.2.0 purely for the size.
+
 ## 0.2.0
 
 - **Any widget can go in the bar.** Added `largeTitle` and `compactTitle`,

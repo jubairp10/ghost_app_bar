@@ -1,5 +1,39 @@
-# Keep screenshots out of the package archive — the README loads them
-# from GitHub instead.
+# NOTE: a .pubignore REPLACES .gitignore for publishing rather than adding
+# to it, so every build-artifact rule from .gitignore must be repeated here.
+# Omitting them once shipped two 44 MB kernel files inside 0.2.0.
+
+# Build artifacts
+.dart_tool/
+/build/
+/coverage/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+pubspec.lock
+
+# Editor and OS cruft
+*.iml
+*.ipr
+*.iws
+.idea/
+.DS_Store
+*.log
+*.swp
+
+# Screenshots — the README loads these from GitHub instead.
 screenshot_light.png
 screenshot_top.png
 screenshot_collapsed.png
+
+# The example's generated platform scaffolding. Publishing it would add
+# tens of megabytes of icons and build files for no benefit — anyone
+# running the example regenerates it with `flutter create .`.
+example/android/
+example/ios/
+example/linux/
+example/macos/
+example/windows/
+example/web/
+example/build/
+example/.dart_tool/
+example/pubspec.lock
