@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2
+
+- Trim the package description to 168 characters. pub.dev caps it at 180 and
+  was withholding all 10 `pubspec.yaml` points for the overrun.
+
 ## 0.2.1
 
 - Shrink the published archive from 27 MB to a few KB. 0.2.0 accidentally
