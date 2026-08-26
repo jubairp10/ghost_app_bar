@@ -1,15 +1,17 @@
 name: ghost_app_bar
 description: >-
-  An invisible app bar scaffold with a gradient scrim and iOS-style
-  large-title collapse. Content scrolls behind the bar and dissolves
-  into the status bar with no visible seam.
-version: 0.1.2
+  Transparent collapsing app bar with an iOS-style large title that fades as
+  you scroll. Content scrolls behind it and dissolves into the status bar with
+  no seam. Theme-aware, zero dependencies.
+version: 0.2.0
 repository: https://github.com/jubairp10/ghost_app_bar
+issue_tracker: https://github.com/jubairp10/ghost_app_bar/issues
 topics:
   - appbar
-  - scroll
   - ui
   - widget
+  - animation
+  - scroll
 
 environment:
   sdk: ^3.5.0

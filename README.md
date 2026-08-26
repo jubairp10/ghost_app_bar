@@ -18,8 +18,10 @@ Works on all renderers: plain gradient paint, no `ShaderMask`.
 - Gradient scrim covering the status bar — no seam between bar and content
 - Large title that scrolls away and fades out
 - Compact title that fades into the bar past a configurable offset
+- Theme-aware: readable in light and dark mode with no colors passed
 - Sliver-based content, or a plain `children` list via the convenience
   constructor
+- Zero dependencies beyond Flutter itself
 
 ## Usage
 
@@ -27,7 +29,6 @@ Works on all renderers: plain gradient paint, no `ShaderMask`.
 import 'package:ghost_app_bar/ghost_app_bar.dart';
 
 Scaffold(
-  backgroundColor: const Color(0xFF06140A),
   body: GhostAppBarScaffold.children(
     title: 'Chats',
     leading: const CircleAvatar(radius: 18),
@@ -35,12 +36,15 @@ Scaffold(
       IconButton(icon: const Icon(Icons.search), onPressed: () {}),
     ],
     children: [
-      for (var i = 0; i < 40; i++)
-        ListTile(title: Text('Item $i', style: const TextStyle(color: Colors.white))),
+      for (var i = 0; i < 40; i++) ListTile(title: Text('Item $i')),
     ],
   ),
 )
 ```
+
+Colors come from the ambient `Theme`, so this is readable in light and dark
+mode without passing any. Override `scrimColor`, `largeTitleStyle`, or
+`compactTitleStyle` when you want something specific.
 
 For full control use the default constructor with `slivers`.
 
@@ -50,7 +54,7 @@ For full control use the default constructor with `slivers`.
 |---|---|---|
 | `controller` | internal | Optional external `ScrollController` |
 | `collapseOffset` | `30` | Scroll offset (px) after which the compact title shows |
-| `scrimColor` | `0xFF06140A` | Color the content dissolves into — match your background |
+| `scrimColor` | theme | Color the content dissolves into — defaults to the scaffold background |
 | `scrimExtent` | `34` | Extra fade distance below the bar |
 | `barHeight` | `64` | Bar row height, excluding status bar |
 | `horizontalPadding` | `20` | Padding for bar and large title |

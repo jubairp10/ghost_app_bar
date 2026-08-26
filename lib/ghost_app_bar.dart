@@ -1,3 +1,9 @@
+/// A transparent, "invisible" app bar with an iOS-style large-title
+/// collapse and a gradient scrim that hides the seam at the status bar.
+///
+/// The entry point is [GhostAppBarScaffold].
+library;
+
 import 'package:flutter/material.dart';
 
 /// A scaffold body with an "invisible" app bar:
@@ -8,15 +14,30 @@ import 'package:flutter/material.dart';
 /// * A large title fades out as you scroll; a compact title fades into
 ///   the bar (WhatsApp / iOS large-title style).
 ///
-/// Works on all renderers (plain gradient paint, no ShaderMask).
+/// Colors follow the ambient [Theme] unless you override them, so it works
+/// in light and dark mode out of the box.
+///
+/// Renders with plain gradient paint on all renderers — no `BackdropFilter`
+/// and no `ShaderMask`.
+///
+/// ```dart
+/// GhostAppBarScaffold.children(
+///   title: 'Chats',
+///   children: [for (final c in contacts) ContactTile(c)],
+/// )
+/// ```
 class GhostAppBarScaffold extends StatefulWidget {
   /// Large title shown below the bar; scrolls away and fades out.
   final String title;
 
-  /// Style for the large title. Defaults to 30px bold white.
+  /// Style for the large title.
+  ///
+  /// Defaults to the theme's `headlineMedium`, bolded.
   final TextStyle? largeTitleStyle;
 
   /// Style for the compact title that fades into the bar.
+  ///
+  /// Defaults to the theme's `titleMedium`.
   final TextStyle? compactTitleStyle;
 
   /// Widget at the start of the bar (e.g. avatar or back button).
@@ -28,9 +49,12 @@ class GhostAppBarScaffold extends StatefulWidget {
   /// Scroll offset (px) after which the compact title is shown.
   final double collapseOffset;
 
-  /// Scrim color the content dissolves into. Use a color close to your
-  /// background's top edge. Alpha is applied by the gradient.
-  final Color scrimColor;
+  /// Scrim color the content dissolves into. Alpha is applied by the
+  /// gradient.
+  ///
+  /// Defaults to the theme's [ThemeData.scaffoldBackgroundColor], which is
+  /// what you want whenever the scroll view sits directly on the scaffold.
+  final Color? scrimColor;
 
   /// Extra fade distance (px) below the bar for the scrim.
   final double scrimExtent;
@@ -52,6 +76,7 @@ class GhostAppBarScaffold extends StatefulWidget {
   /// internally.
   final ScrollController? controller;
 
+  /// Creates a ghost app bar around a list of [slivers].
   const GhostAppBarScaffold({
     super.key,
     required this.title,
@@ -61,7 +86,7 @@ class GhostAppBarScaffold extends StatefulWidget {
     this.leading,
     this.actions = const [],
     this.collapseOffset = 30,
-    this.scrimColor = const Color(0xFF06140A),
+    this.scrimColor,
     this.scrimExtent = 34,
     this.barHeight = 64,
     this.horizontalPadding = 20,
@@ -79,7 +104,7 @@ class GhostAppBarScaffold extends StatefulWidget {
     Widget? leading,
     List<Widget> actions = const [],
     double collapseOffset = 30,
-    Color scrimColor = const Color(0xFF06140A),
+    Color? scrimColor,
     double scrimExtent = 34,
     double barHeight = 64,
     double horizontalPadding = 20,
@@ -145,21 +170,18 @@ class _GhostAppBarScaffoldState extends State<GhostAppBarScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     final double statusBar = MediaQuery.of(context).padding.top;
-    final Color scrim = widget.scrimColor;
+    final Color scrim = widget.scrimColor ?? theme.scaffoldBackgroundColor;
+    final Color onScrim = theme.colorScheme.onSurface;
+    final double scrimHeight = statusBar + widget.barHeight + widget.scrimExtent;
 
     final TextStyle largeStyle = widget.largeTitleStyle ??
-        const TextStyle(
-          fontSize: 30,
-          fontWeight: FontWeight.w700,
-          color: Colors.white,
-        );
+        (theme.textTheme.headlineMedium ?? const TextStyle(fontSize: 30))
+            .copyWith(fontWeight: FontWeight.w700, color: onScrim);
     final TextStyle compactStyle = widget.compactTitleStyle ??
-        const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          color: Colors.white,
-        );
+        (theme.textTheme.titleMedium ?? const TextStyle(fontSize: 18))
+            .copyWith(fontWeight: FontWeight.w600, color: onScrim);
 
     return Stack(
       children: [
@@ -210,7 +232,7 @@ class _GhostAppBarScaffoldState extends State<GhostAppBarScaffold> {
           top: 0,
           left: 0,
           right: 0,
-          height: statusBar + widget.barHeight + widget.scrimExtent,
+          height: scrimHeight,
           child: IgnorePointer(
             child: DecoratedBox(
               decoration: BoxDecoration(

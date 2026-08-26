@@ -46,6 +46,41 @@ void main() {
     expect(opacity.opacity, 1);
   });
 
+  testWidgets('titles default to theme colors, not hardcoded white',
+      (tester) async {
+    final theme = ThemeData(brightness: Brightness.light);
+    await tester.pumpWidget(MaterialApp(
+      theme: theme,
+      home: Scaffold(
+        body: GhostAppBarScaffold.children(
+          title: 'Chats',
+          children: const [SizedBox(height: 10)],
+        ),
+      ),
+    ));
+
+    final large = tester.widget<Text>(find.text('Chats').first);
+    expect(large.style!.color, theme.colorScheme.onSurface);
+    expect(large.style!.color, isNot(Colors.white));
+  });
+
+  testWidgets('explicit scrimColor and styles still win over the theme',
+      (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: GhostAppBarScaffold.children(
+          title: 'Chats',
+          scrimColor: const Color(0xFF06140A),
+          largeTitleStyle: const TextStyle(color: Colors.white),
+          children: const [SizedBox(height: 10)],
+        ),
+      ),
+    ));
+
+    final large = tester.widget<Text>(find.text('Chats').first);
+    expect(large.style!.color, Colors.white);
+  });
+
   testWidgets('renders leading and actions', (tester) async {
     await tester.pumpWidget(wrap(
       GhostAppBarScaffold.children(

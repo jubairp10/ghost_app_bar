@@ -3,55 +3,44 @@ import 'package:ghost_app_bar/ghost_app_bar.dart';
 
 void main() => runApp(const ExampleApp());
 
-class ExampleApp extends StatelessWidget {
+class ExampleApp extends StatefulWidget {
   const ExampleApp({super.key});
+
+  @override
+  State<ExampleApp> createState() => _ExampleAppState();
+}
+
+class _ExampleAppState extends State<ExampleApp> {
+  bool _dark = false;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(brightness: Brightness.light),
+      darkTheme: ThemeData(brightness: Brightness.dark),
+      themeMode: _dark ? ThemeMode.dark : ThemeMode.light,
       home: Scaffold(
-        backgroundColor: Colors.white,
+        // No colors passed to GhostAppBarScaffold — it follows the theme.
         body: GhostAppBarScaffold.children(
           title: 'Chats',
-          scrimColor: Colors.white,
-          largeTitleStyle: const TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            color: Colors.black,
-          ),
-          compactTitleStyle: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
           leading: const CircleAvatar(
             radius: 18,
-            backgroundColor: Colors.black12,
-            child: Icon(Icons.person, color: Colors.black54),
+            child: Icon(Icons.person, size: 20),
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.search, color: Colors.black87),
-              onPressed: () {},
+              icon: Icon(_dark ? Icons.light_mode : Icons.dark_mode),
+              onPressed: () => setState(() => _dark = !_dark),
             ),
-            IconButton(
-              icon: const Icon(Icons.more_vert, color: Colors.black87),
-              onPressed: () {},
-            ),
+            IconButton(icon: const Icon(Icons.search), onPressed: () {}),
           ],
           children: [
             for (var i = 0; i < 40; i++)
               ListTile(
-                leading: const CircleAvatar(backgroundColor: Colors.black12),
-                title: Text(
-                  'Contact $i',
-                  style: const TextStyle(color: Colors.black87),
-                ),
-                subtitle: Text(
-                  'Last message preview…',
-                  style: TextStyle(color: Colors.black.withValues(alpha: 0.45)),
-                ),
+                leading: const CircleAvatar(child: Text('C')),
+                title: Text('Contact $i'),
+                subtitle: const Text('Last message preview…'),
               ),
           ],
         ),
