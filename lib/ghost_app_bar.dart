@@ -27,15 +27,29 @@ import 'package:flutter/material.dart';
 /// )
 /// ```
 class GhostAppBarScaffold extends StatefulWidget {
-  /// Large title shown below the bar; scrolls away and fades out.
-  final String title;
+  /// Text for both titles, for the common case.
+  ///
+  /// Optional: pass [largeTitle] and [compactTitle] instead to put arbitrary
+  /// widgets in the bar. Whichever of those you supply overrides this.
+  final String? title;
 
-  /// Style for the large title.
+  /// Expanded header shown below the bar; scrolls away and fades out.
+  ///
+  /// Any widget — a title with a subtitle, an avatar row, a search field.
+  /// Defaults to [title] rendered with [largeTitleStyle].
+  final Widget? largeTitle;
+
+  /// Content that fades into the bar once collapsed past [collapseOffset].
+  ///
+  /// Any widget. Defaults to [title] rendered with [compactTitleStyle].
+  final Widget? compactTitle;
+
+  /// Style for the default large title. Ignored when [largeTitle] is set.
   ///
   /// Defaults to the theme's `headlineMedium`, bolded.
   final TextStyle? largeTitleStyle;
 
-  /// Style for the compact title that fades into the bar.
+  /// Style for the default compact title. Ignored when [compactTitle] is set.
   ///
   /// Defaults to the theme's `titleMedium`.
   final TextStyle? compactTitleStyle;
@@ -77,9 +91,14 @@ class GhostAppBarScaffold extends StatefulWidget {
   final ScrollController? controller;
 
   /// Creates a ghost app bar around a list of [slivers].
+  ///
+  /// Supply [title] for a plain text bar, or [largeTitle] and [compactTitle]
+  /// to build the bar out of your own widgets.
   const GhostAppBarScaffold({
     super.key,
-    required this.title,
+    this.title,
+    this.largeTitle,
+    this.compactTitle,
     this.controller,
     this.largeTitleStyle,
     this.compactTitleStyle,
@@ -92,12 +111,17 @@ class GhostAppBarScaffold extends StatefulWidget {
     this.horizontalPadding = 20,
     this.bottomPadding = 120,
     required this.slivers,
-  });
+  }) : assert(
+          title != null || (largeTitle != null && compactTitle != null),
+          'Provide a title, or both largeTitle and compactTitle.',
+        );
 
   /// Convenience constructor for a plain list of box widgets.
   GhostAppBarScaffold.children({
     Key? key,
-    required String title,
+    String? title,
+    Widget? largeTitle,
+    Widget? compactTitle,
     ScrollController? controller,
     TextStyle? largeTitleStyle,
     TextStyle? compactTitleStyle,
@@ -113,6 +137,8 @@ class GhostAppBarScaffold extends StatefulWidget {
   }) : this(
           key: key,
           title: title,
+          largeTitle: largeTitle,
+          compactTitle: compactTitle,
           controller: controller,
           largeTitleStyle: largeTitleStyle,
           compactTitleStyle: compactTitleStyle,
@@ -183,6 +209,11 @@ class _GhostAppBarScaffoldState extends State<GhostAppBarScaffold> {
         (theme.textTheme.titleMedium ?? const TextStyle(fontSize: 18))
             .copyWith(fontWeight: FontWeight.w600, color: onScrim);
 
+    final Widget largeTitle =
+        widget.largeTitle ?? Text(widget.title!, style: largeStyle);
+    final Widget compactTitle =
+        widget.compactTitle ?? Text(widget.title!, style: compactStyle);
+
     return Stack(
       children: [
         // ── Content — scrolls behind the invisible bar ──────────────────
@@ -213,7 +244,7 @@ class _GhostAppBarScaffoldState extends State<GhostAppBarScaffold> {
                             2,
                             widget.horizontalPadding,
                             16),
-                        child: Text(widget.title, style: largeStyle),
+                        child: largeTitle,
                       ),
                     ),
                   ),
@@ -269,7 +300,7 @@ class _GhostAppBarScaffoldState extends State<GhostAppBarScaffold> {
                   child: AnimatedOpacity(
                     opacity: _collapsed ? 1 : 0,
                     duration: const Duration(milliseconds: 180),
-                    child: Text(widget.title, style: compactStyle),
+                    child: compactTitle,
                   ),
                 ),
                 for (final action in widget.actions) ...[

@@ -19,6 +19,7 @@ Works on all renderers: plain gradient paint, no `ShaderMask`.
 - Large title that scrolls away and fades out
 - Compact title that fades into the bar past a configurable offset
 - Theme-aware: readable in light and dark mode with no colors passed
+- Put **any widget** in the bar — subtitles, avatars, search fields, tabs
 - Sliver-based content, or a plain `children` list via the convenience
   constructor
 - Zero dependencies beyond Flutter itself
@@ -46,12 +47,46 @@ Colors come from the ambient `Theme`, so this is readable in light and dark
 mode without passing any. Override `scrimColor`, `largeTitleStyle`, or
 `compactTitleStyle` when you want something specific.
 
-For full control use the default constructor with `slivers`.
+### Custom bar content
+
+`title` is a shortcut. For anything else, pass widgets — they get the same
+fade and collapse behaviour for free:
+
+```dart
+GhostAppBarScaffold.children(
+  // Expanded header: heading plus a subtitle.
+  largeTitle: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text('Library', style: Theme.of(context).textTheme.headlineMedium),
+      Text('40 documents · 2 shared'),
+    ],
+  ),
+  // What fades into the bar once collapsed.
+  compactTitle: Row(
+    children: [
+      const Icon(Icons.folder_rounded, size: 20),
+      const SizedBox(width: 8),
+      const Text('Library'),
+    ],
+  ),
+  leading: const BackButton(),
+  actions: [IconButton(icon: const Icon(Icons.search), onPressed: () {})],
+  children: [...],
+)
+```
+
+Pass `title` alongside just one of them to override a single side — the other
+falls back to the text. For full control of the scroll content, use the
+default constructor with `slivers`.
 
 ### Tuning
 
 | Parameter | Default | Description |
 |---|---|---|
+| `title` | — | Text for both titles; optional if you pass both widgets below |
+| `largeTitle` | from `title` | Any widget for the expanded header |
+| `compactTitle` | from `title` | Any widget for the collapsed bar |
 | `controller` | internal | Optional external `ScrollController` |
 | `collapseOffset` | `30` | Scroll offset (px) after which the compact title shows |
 | `scrimColor` | theme | Color the content dissolves into — defaults to the scaffold background |

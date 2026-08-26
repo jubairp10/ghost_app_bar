@@ -81,6 +81,45 @@ void main() {
     expect(large.style!.color, Colors.white);
   });
 
+  testWidgets('custom largeTitle and compactTitle widgets replace the text',
+      (tester) async {
+    await tester.pumpWidget(wrap(
+      GhostAppBarScaffold.children(
+        largeTitle: const Icon(Icons.dashboard),
+        compactTitle: const Icon(Icons.dashboard_outlined),
+        children: const [SizedBox(height: 10)],
+      ),
+    ));
+
+    expect(find.byIcon(Icons.dashboard), findsOneWidget);
+    expect(find.byIcon(Icons.dashboard_outlined), findsOneWidget);
+  });
+
+  testWidgets('a title string still fills in a missing custom widget',
+      (tester) async {
+    await tester.pumpWidget(wrap(
+      GhostAppBarScaffold.children(
+        title: 'Settings',
+        largeTitle: const Icon(Icons.settings),
+        children: const [SizedBox(height: 10)],
+      ),
+    ));
+
+    // Large title is the icon; compact falls back to the title text.
+    expect(find.byIcon(Icons.settings), findsOneWidget);
+    expect(find.text('Settings'), findsOneWidget);
+  });
+
+  test('asserts when neither a title nor both custom widgets are given', () {
+    expect(
+      () => GhostAppBarScaffold.children(
+        largeTitle: const Icon(Icons.abc),
+        children: const [],
+      ),
+      throwsAssertionError,
+    );
+  });
+
   testWidgets('renders leading and actions', (tester) async {
     await tester.pumpWidget(wrap(
       GhostAppBarScaffold.children(
